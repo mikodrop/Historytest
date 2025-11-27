@@ -15,6 +15,7 @@ export interface UserAnswer {
 
 export interface UserInfo {
   name: string;
+  email: string;
   age: string;
   grade: string;
 }

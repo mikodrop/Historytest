@@ -7,14 +7,36 @@ interface UserInfoFormProps {
 
 export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [age, setAge] = useState('');
   const [grade, setGrade] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const validateEmail = (email: string) => {
+    // Простая, но эффективная регулярка для проверки email
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name && age && grade) {
-      onSubmit({ name, age, grade });
+    
+    // Сброс ошибки перед проверкой
+    setEmailError('');
+
+    if (!validateEmail(email)) {
+      setEmailError('Пожалуйста, введите корректный адрес электронной почты.');
+      return;
     }
+
+    if (name && email && age && grade) {
+      onSubmit({ name, email, age, grade });
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    if (emailError) setEmailError(''); // Убираем ошибку при вводе
   };
 
   return (
@@ -40,6 +62,31 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit }) => {
               placeholder="Иван Иванов"
               className="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-history-gold focus:ring-history-gold outline-none transition-colors"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold text-history-dark mb-2">
+              Электронная почта
+            </label>
+            <div className="relative">
+              <input
+                type="email"
+                value={email}
+                onChange={handleEmailChange}
+                required
+                placeholder="ivan@example.com"
+                className={`w-full p-3 border-2 rounded-lg outline-none transition-colors ${
+                  emailError 
+                    ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
+                    : 'border-gray-200 focus:border-history-gold focus:ring-history-gold'
+                }`}
+              />
+              {emailError && (
+                <p className="text-red-500 text-xs mt-1 absolute -bottom-5 left-0">
+                  {emailError}
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

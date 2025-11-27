@@ -15,6 +15,7 @@ export const sendToTelegram = async (userInfo: UserInfo, result: CareerResult, a
 
 👤 АНКЕТА УЧЕНИКА:
 • Имя: ${userInfo.name}
+• Email: ${userInfo.email}
 • Класс: ${userInfo.grade}
 • Возраст: ${userInfo.age}
 
